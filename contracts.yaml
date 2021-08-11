@@ -1,0 +1,106 @@
+openapi: 3.0.2
+info:
+  title: MineshaftFront & MineshaftService Communication Contract Documentation
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    PlottingPhase:
+      title: PlottingPhase
+      type: string
+      enum:
+        - PHASE_1
+        - PHASE_2
+        - PHASE_3
+    PlotInfo:
+      title: PlotInfo
+      required:
+        - id
+        - publicKey
+        - mostRecentPhase
+        - openTime
+        - closeTime
+        - downloadLink
+        - errorCode
+      type: object
+      properties:
+        id:
+          type: string
+          description: Plot id
+          example: ''
+        publicKey:
+          type: string
+          description: Public key of the customer to whom the Plot belongs
+          example: ''
+        mostRecentPhase:
+          $ref: '#/components/schemas/PlottingPhase'
+        openTime:
+          type: string
+          format: date-time
+          description: The time when the Plot is created by plotter
+          example: '2021-07-16T04:03:23.204-07:00'
+        closeTime:
+          type: string
+          format: date-time
+          description: The time when the plotting is failed or when the Plot is successfully uploaded to storage
+          example: '2021-07-16T04:03:23.204-07:00'
+        downloadLink:
+          type: string
+          description: The url that customer would use to download the Plot
+          example: https://presignedurldemo.s3.eu-west-2.amazonaws.com/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJJWZ7B6WCRGMKFGQ%2F20180210%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180210T171315Z&X-Amz-Expires=1800&X-Amz-Signature=12b74b0788aa036bc7c3d03b3f20c61f1f91cc9ad8873e3314255dc479a25351&X-Amz-SignedHeaders=host
+        errorCode:
+          type: string
+          description: The error code that describes why the plotting progress failed
+          example: ''
+    Progress:
+      title: Progress
+      required:
+        - lastQueriedPlotId
+        - currentPlot
+      type: object
+      properties:
+        lastQueriedPlotId:
+          type: string
+          description: Id of Plot that belongs to the Parcel who owns the currentPlot, either referencing an previously errored Plot or the same id as 'currentPlot', if there is no such Parcel then this field should be null
+          example: ''
+        currentPlot:
+          $ref: '#/components/schemas/PlotInfo'
+    QueryPlottingProgressResponse:
+      title: QueryPlottingProgressResponse
+      required:
+        - allProgress
+      type: object
+      nullable: false
+      properties:
+        allProgress:
+          type: array
+          items:
+            $ref: '#/components/schemas/Progress'
+    QueryPlottingProgressCallbackRequest:
+      title: QueryPlottingProgressCallbackRequest
+      required:
+        - persistedPlotIds
+      type: object
+      properties:
+        persistedPlotIds:
+          type: array
+          items:
+            type: string
+    OrderPlotsWithPublicKeyRequest:
+      title: OrderPlotsWithPublicKeyRequest
+      required:
+        - publicKey
+        - amount
+        - prioritize
+      properties:
+        publicKey:
+          type: string
+          description: Public key of the customer who placed this order
+          example: ''
+        amount:
+          type: integer
+          description: Public key of the customer to whom the Plot belongs
+        prioritize:
+          type: boolean
+          description: If this field is assigned to true then this order would be processed as priority
+          default: false
