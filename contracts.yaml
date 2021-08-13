@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: MineshaftFront & MineshaftService Communication Contract Documentation
+  title: Mineshaft Services Communication Contract
   version: 1.0.0
 paths: {}
 components:
