@@ -70,10 +70,10 @@ components:
       required:
         - allProgress
       type: object
-      nullable: false
       properties:
         allProgress:
           type: array
+          nullable: false
           items:
             $ref: '#/components/schemas/Progress'
     QueryPlottingProgressCallbackRequest:
@@ -95,10 +95,12 @@ components:
       properties:
         publicKey:
           type: string
+          nullable: false
           description: Public key of the customer who placed this order
           example: ''
         amount:
           type: integer
+          nullable: false
           description: Public key of the customer to whom the Plot belongs
         prioritize:
           type: boolean
